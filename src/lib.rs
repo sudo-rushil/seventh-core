@@ -10,37 +10,11 @@ mod tests {
     }
 }
 
-#[macro_use]
-extern crate serde;
 extern crate reqwest;
+extern crate serde;
+extern crate serde_json;
 
-#[derive(Deserialize, Debug)]
-struct User {
-    login: String,
-    id: u32,
-}
+#[macro_use]
+extern crate serde_derive;
 
-#[derive(Deserialize, Serialize, Debug)]
-struct Thing {
-    base: String,
-    currency: String,
-    amount: String,
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-struct Data {
-    data: Thing
-}
-
-#[tokio::main]
-async fn main() -> Result<(), reqwest::Error> {
-    let request_url = format!(
-        "https://api.coinbase.com/v2/prices/BTC-USD/sell"
-    );
-    println!("{}", request_url);
-    let response = reqwest::get(&request_url).await?;
-
-    let users: Data = response.json().await?;
-    println!("{:?}", users);
-    Ok(())
-}
+pub mod api;
