@@ -1,5 +1,7 @@
 //! Retrieve data from Coinbase and CoinGecko APIs
 
+use std::fmt;
+
 /// Response types
 
 /// endpoints:
@@ -15,27 +17,39 @@ struct Price {
 }
 
 #[derive(Deserialize, Debug)]
-struct Data {
+struct PriceData {
     data: Price
 }
 
-struct DataAPI {
-    client: reqwest::Client,
+pub struct CoinData {
+    ticker: String,
     historical: Vec<f32>,
     buy: f32,
     sell: f32,
     spot: f32,
 }
 
-#[tokio::main]
-pub async fn thing() -> Result<(), reqwest::Error> {
-    let request_url = format!(
-        "https://api.coinbase.com/v2/prices/BTC-USD/sell"
-    );
-    println!("{}", request_url);
-    let response = reqwest::get(&request_url).await?;
+pub struct DataAPI {
+    client: reqwest::Client,
+    coins: Vec<CoinData>
+}
 
-    let users: Data = response.json().await?;
-    println!("{:?}", users);
-    Ok(())
+impl DataAPI {
+    #[tokio::main]
+    async fn get<T: for<'de> serde::Deserialize<'de>>(&self, endpoint: &str) -> Result<T, reqwest::Error> {
+        let response = self.client.get(endpoint).send().await?;
+        let result: T = response.json().await?;
+
+        Ok(result)
+    }
+
+    pub fn new() -> Self {
+        DataAPI { client: reqwest::Client::new(), coins: vec![CoinData { ticker: "BTC".to_owned(), historical: vec![2.0], buy: 2.0, sell: 2.0, spot: 2.0 }] }
+    }
+}
+
+impl fmt::Display for CoinData {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "DataAPI: buy {}, sell {}, spot {}", self.buy, self.sell, self.spot)
+    }
 }
