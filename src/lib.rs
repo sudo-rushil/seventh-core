@@ -6,7 +6,3 @@ extern crate serde_json;
 extern crate serde_derive;
 
 pub mod api;
-
-pub fn add() -> u32 {
-    2
-}

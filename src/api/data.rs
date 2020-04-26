@@ -7,7 +7,6 @@ use std::fmt;
 /// endpoints:
 /// coin/marketchart/range
 /// prices - buy, sell, spot
-/// time
 
 #[derive(Deserialize, Debug)]
 struct Price {
@@ -17,8 +16,14 @@ struct Price {
 }
 
 #[derive(Deserialize, Debug)]
-struct PriceData {
+pub struct PriceData {
     data: Price
+}
+
+#[derive(Deserialize, Debug)]
+pub struct HistoricalData {
+    prices: Vec<Vec<f32>>,
+    total_volumes: Vec<Vec<f32>>
 }
 
 pub struct CoinData {
