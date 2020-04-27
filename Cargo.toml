@@ -1,6 +1,6 @@
 [package]
 name = "seventh_core"
-description = "core library for bitcoin data retrieval and trading engine"
+description = "Core library for Seventh cryptocurrency trading engine"
 version = "0.1.0"
 authors = ["sudo-rushil <rushil.mallarapu@gmail.com>"]
 edition = "2018"
@@ -18,3 +18,7 @@ tokio = { version = "0.2", features = ["full"] }
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
+
+chrono = "0.4"
+
+phf = { version = "0.8", features = ["macros"] }
