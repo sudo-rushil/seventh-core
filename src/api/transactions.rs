@@ -1,6 +1,6 @@
 //! Place orders using the CoinBase API
 
-use crate::api::orders::{Order, Transaction};
+use crate::api::orders::{OrderData, Transaction};
 
 pub struct BrokerAPI {
     client: reqwest::Client,
@@ -12,7 +12,7 @@ pub struct BrokerAPI {
 
 impl BrokerAPI {
     #[tokio::main]
-    async fn post<T: for<'de> serde::Deserialize<'de>>(&self, endpoint: String, data: Transaction) -> Result<T, reqwest::Error> {
+    async fn post<T: for<'de> serde::Deserialize<'de>>(&self, endpoint: String, data: &Transaction) -> Result<T, reqwest::Error> {
         let response = self.client
             .post(&endpoint)
             .header("Content-Type", "application/json")
@@ -24,6 +24,30 @@ impl BrokerAPI {
         let result: T = response.json().await?;
 
         Ok(result)
+    }
+
+    pub fn sell(&mut self, amount: f32, currency: &str) {
+        let trans = Transaction::new(amount, currency, &self.payment, false);
+        let endpoint = format!("https://api.coinbase.com/v2/accounts/{}/sells", self.account);
+
+        match self.post::<OrderData>(endpoint, &trans) {
+            Ok(order) => println!("{:?}", order.data),
+            Err(e) => panic!("Error placing sell: {}", e)
+        };
+
+        self.history.push(trans);
+    }
+
+    pub fn buy(&mut self, amount: f32, currency: &str) {
+        let trans = Transaction::new(amount, currency, &self.payment, true);
+        let endpoint = format!("https://api.coinbase.com/v2/accounts/{}/buys", self.account);
+
+        match self.post::<OrderData>(endpoint, &trans) {
+            Ok(order) => println!("{:?}", order.data),
+            Err(e) => panic!("Error placing buy: {}", e)
+        };
+
+        self.history.push(trans);
     }
 
     pub fn new(auth: &str, account: &str, payment_method: &str) -> Self {

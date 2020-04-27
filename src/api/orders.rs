@@ -32,6 +32,11 @@ pub struct Order {
     payout_at: String,
 }
 
+#[derive(Deserialize, Debug)]
+pub struct OrderData {
+    pub data: Order,
+}
+
 #[derive(Debug)]
 pub struct Transaction {
     amount: f32,
