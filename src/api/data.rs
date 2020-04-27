@@ -103,10 +103,8 @@ impl DataAPI {
         let sell = self.get_coinbase(coin, "sell");
         let spot = self.get_coinbase(coin, "spot");
         let history = self.get_historical(COIN_ID[coin]);
-
-        let new_data = CoinData::new(buy, sell, spot, history);
-
-        self.coins.push(new_data)
+        
+        self.coins.push(CoinData::new(buy, sell, spot, history))
     }
 
     pub fn new() -> Self {
