@@ -31,7 +31,7 @@ pub struct HistoricalData {
     total_volumes: Vec<Vec<f32>>
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Serialize, Debug, PartialEq, Clone)]
 pub struct CoinData {
     ticker: String,
     historical: Vec<f32>,
@@ -49,6 +49,18 @@ impl CoinData {
             sell: sellprice.amount.parse().unwrap(),
             spot: spotprice.amount.parse().unwrap()
         }
+    }
+
+    pub fn buyprice(&self) -> f32 {
+        self.buy
+    }
+
+    pub fn sellprice(&self) -> f32 {
+        self.sell
+    }
+
+    pub fn historical(&self) -> Vec<f32> {
+        self.historical.clone()
     }
 }
 
@@ -114,4 +126,7 @@ impl DataAPI {
         self.coins.clone()
     }
 
+    pub fn last(&self) -> CoinData {
+        self.coins.last().unwrap().clone()
+    }
 }
