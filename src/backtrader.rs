@@ -1,4 +1,4 @@
-use crate::api::data::*;
+use crate::api::data::{CoinData, DataAPI};
 
 pub struct Backtrader {
     api: DataAPI,
@@ -17,13 +17,15 @@ pub enum Actions {
 
 impl Backtrader {
     pub fn new(account: f32, coin: &str) -> Self {
-        Backtrader {
+        let mut trader = Backtrader {
             api: DataAPI::new(),
             coin: coin.to_owned(),
             history: vec![],
             account,
             holdings: 0.0,
-        }
+        };
+        trader.api.update(coin);
+        trader
     }
 
     pub fn trade(&mut self, action: Actions) {
