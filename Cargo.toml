@@ -22,3 +22,5 @@ serde_json = "1.0"
 chrono = "0.4"
 
 phf = { version = "0.8", features = ["macros"] }
+
+rocket = "0.4.4"
