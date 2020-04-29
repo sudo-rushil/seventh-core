@@ -1,4 +1,4 @@
-use crate::api::data::{CoinData, DataAPI};
+use crate::api::data::DataAPI;
 
 pub struct Backtrader {
     api: DataAPI,
@@ -15,6 +15,15 @@ pub enum Actions {
     Hold,
 }
 
+#[derive(Serialize)]
+pub struct TraderData {
+    historical: Vec<f32>,
+    buy: f32,
+    sell: f32,
+    account: f32,
+    holding: f32,
+}
+
 impl Backtrader {
     pub fn new(account: f32, coin: &str) -> Self {
         let mut trader = Backtrader {
@@ -29,6 +38,7 @@ impl Backtrader {
     }
 
     pub fn trade(&mut self, action: Actions) {
+        println!("Making trade");
         self.api.update(&self.coin);
         self.history.push((self.account, action.clone()));
 
@@ -45,7 +55,7 @@ impl Backtrader {
         }
         let price = self.api.last().buyprice();
 
-        self.account -= price;
+        self.account -= usd;
         self.holdings += usd / price;
     }
 
@@ -59,8 +69,16 @@ impl Backtrader {
         self.holdings -= coin;
     }
 
-    pub fn data(&self) -> CoinData {
-        self.api.last()
+    pub fn data(&self) -> TraderData {
+        let coins = self.api.last();
+
+        TraderData {
+            historical: coins.historical(),
+            buy: coins.buyprice(),
+            sell: coins.sellprice(),
+            account: self.account,
+            holding: self.holdings,
+        }
     }
 
     pub fn history(&self) -> Vec<(f32, Actions)> {
