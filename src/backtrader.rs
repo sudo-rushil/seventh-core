@@ -37,6 +37,13 @@ impl Backtrader {
         trader
     }
 
+    pub fn reset(&mut self, account: f32, coin: &str) {
+        self.history = vec![];
+        self.account = account;
+        self.coin = coin.to_owned();
+        self.holdings = 0.0;
+    }
+
     pub fn trade(&mut self, action: Actions) {
         println!("Making trade");
         self.api.update(&self.coin);

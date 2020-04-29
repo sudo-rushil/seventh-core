@@ -18,7 +18,9 @@ struct Transaction {
 }
 
 #[get("/")]
-fn index() -> String {
+fn index(trader: State<LockedTrader>) -> String {
+    let mut lock = trader.trader.lock().expect("Lock state");
+    lock.reset(1000.0, "BTC");
     "LIVE".to_owned()
 }
 
