@@ -24,3 +24,5 @@ chrono = "0.4"
 phf = { version = "0.8", features = ["macros"] }
 
 rocket = "0.4.4"
+
+csv = "1.1"
