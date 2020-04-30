@@ -66,10 +66,7 @@ impl Backtrader {
         self.holdings += usd / price;
     }
 
-    fn sell(&mut self, mut coin: f32) {
-        if coin > self.holdings {
-            coin = self.holdings;
-        }
+    fn sell(&mut self, coin: f32) {
         let price = self.api.last().sellprice();
 
         self.account += coin * price;
