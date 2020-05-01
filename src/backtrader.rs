@@ -1,3 +1,5 @@
+//! Real time backtesting system
+
 use crate::api::data::DataAPI;
 
 pub struct Backtrader {

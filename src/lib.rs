@@ -9,3 +9,4 @@ extern crate rocket;
 
 pub mod api;
 pub mod backtrader;
+pub mod historical;
