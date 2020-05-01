@@ -19,11 +19,11 @@ pub enum Actions {
 
 #[derive(Serialize)]
 pub struct TraderData {
-    historical: Vec<f32>,
-    buy: f32,
-    sell: f32,
-    account: f32,
-    holding: f32,
+    pub historical: Vec<f32>,
+    pub buy: f32,
+    pub sell: f32,
+    pub account: f32,
+    pub holding: f32,
 }
 
 impl Backtrader {
