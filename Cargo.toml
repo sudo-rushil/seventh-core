@@ -5,7 +5,7 @@ version = "0.1.0"
 authors = ["sudo-rushil <rushil.mallarapu@gmail.com>"]
 edition = "2018"
 keywords = ["cryptocurrency", "coinbase", "bitcoin"]
-repository = ""
+repository = "https://github.com/sudo-rushil/seventh-core"
 license = "MIT"
 readme = "README.md"
 
