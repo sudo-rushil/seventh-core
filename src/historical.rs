@@ -31,6 +31,17 @@ impl RawData {
         self.low.push(rec.get(3).unwrap().parse().unwrap());
         self.close.push(rec.get(4).unwrap().parse().unwrap());
     }
+
+    fn take_slice(&self, size: usize) -> RawData {
+        let len = self.open.len();
+
+        RawData {
+            open: self.open[len - size..len].to_vec(),
+            high: self.high[len - size..len].to_vec(),
+            low: self.low[len - size..len].to_vec(),
+            close: self.close[len - size..len].to_vec(),
+        }
+    }
 }
 
 fn get_first_arg() -> Result<OsString, Box<dyn Error>> {
@@ -50,7 +61,7 @@ pub fn run() -> Result<RawData, Box<dyn Error>> {
         let record = result?;
         out.add_record(record);
     }
-    Ok(out)
+    Ok(out.take_slice(1000))
 }
 
 pub struct Histtrader {
