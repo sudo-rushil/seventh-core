@@ -14,15 +14,21 @@ pub struct Livetrader {
 }
 
 impl Livetrader {
-    pub fn new(account: f32, coin: &str, auth: &str, account: &str, payment_method: &str) -> Self {
+    pub fn new(
+        account: f32,
+        coin: &str,
+        auth: &str,
+        account_name: &str,
+        payment_method: &str,
+    ) -> Self {
         let mut trader = Livetrader {
             api: DataAPI::new(),
-            live: BrokerAPI::new(auth, account, payment_method),
+            live: BrokerAPI::new(auth, account_name, payment_method),
             coin: coin.to_owned(),
             history: vec![],
             account,
             holdings: 0.0,
-        }
+        };
         trader.api.update(coin);
         trader
     }
@@ -34,7 +40,7 @@ impl Livetrader {
         self.holdings = 0.0;
     }
 
-    pub fn trade(&mut self, action: Action) {
+    pub fn trade(&mut self, action: Actions) {
         println!("Making trade");
         self.api.update(&self.coin);
         self.history.push((self.account, action.clone()));
@@ -54,7 +60,7 @@ impl Livetrader {
 
         self.account -= usd;
         self.holdings += usd / price;
-        self.live.buy(usd, self.coin);
+        self.live.buy(usd, &self.coin);
     }
 
     fn sell(&mut self, coin: f32) {
@@ -62,7 +68,7 @@ impl Livetrader {
 
         self.account += coin * price;
         self.holdings -= coin;
-        self.live.sell(coin, self.coin);
+        self.live.sell(coin, &self.coin);
     }
 
     pub fn data(&self) -> TraderData {
