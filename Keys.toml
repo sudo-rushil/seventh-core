@@ -1,0 +1,3 @@
+auth = "<Coinbase auth token>"
+account = "<Coinbase account token>"
+payment = "<Coinbase payment method token>"
