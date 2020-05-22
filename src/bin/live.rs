@@ -3,7 +3,7 @@
 #[macro_use]
 extern crate rocket;
 
-extern crate config;
+// extern crate config;
 
 use rocket::{request::Form, State};
 use std::sync::Mutex;
